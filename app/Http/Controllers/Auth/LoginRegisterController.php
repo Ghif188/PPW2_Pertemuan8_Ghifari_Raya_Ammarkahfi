@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\SendEmail;
+use Illuminate\Support\Facades\Mail;
 
 
 class LoginRegisterController extends Controller
@@ -35,6 +37,15 @@ class LoginRegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+
+        $content = [
+            'name' => 'Berhasil Registrasi',
+            'subject' => ('To : '. $request->email),
+            'nama' => ('Name :'. $request->name),
+            'email' => ('Email :'. $request->email),
+        ];
+
+        Mail::to($request->email)->send(new SendEmail($content));
 
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
