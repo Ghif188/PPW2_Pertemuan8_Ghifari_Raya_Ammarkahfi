@@ -9,17 +9,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\SendEmail;
 use Illuminate\Support\Facades\Mail;
+use Intervention\Image\Facades\Image;
 
 
 class LoginRegisterController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guest')->except([
-            'logout', 'dashboard'
-        ]);
-    }
-
     public function register(){
         return view('auth.register');
     }
@@ -29,13 +23,23 @@ class LoginRegisterController extends Controller
         $request->validate([
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:8|confirmed',
+            'photo' =>'image|nullable|max:1999'
         ]);
 
+        if ($request->hasFile('photo')) {
+            $filenameWithExt = $request->file('photo')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $filenameSimpan = $filename . '_' . time() . '.' . $extension;
+            $path = $request->file('photo')->storeAs('photos', $filenameSimpan);
+        }  
+        
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'photo' => $path
         ]);
 
         $content = [
@@ -118,5 +122,72 @@ class LoginRegisterController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('login')
             ->withSuccess('You have logged out successfully!');;
+    }
+
+    public function editFoto(){
+        if (Auth::check()) {
+            $data = User::where('email', Auth::user()->email)->first()->photo;
+            return view('auth.edit', compact('data'));
+        }
+
+        return redirect()->route('login')
+            ->withErrors([
+                'email' => 'Please login to access the dashboard.',
+            ])->onlyInput('email');
+    }
+
+    public function updateFoto(Request $request){
+        if (Auth::check()) {
+            $request->validate([
+                'photo' =>'image|nullable|max:1999'
+            ]);
+            if ($request->hasFile('photo')) {
+                $filenameWithExt = $request->file('photo')->getClientOriginalName();
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                $extension = $request->file('photo')->getClientOriginalExtension();
+                $filenameSimpan = $filename . '_' . time() . '.' . $extension;
+                $path = $request->file('photo')->storeAs('photos', $filenameSimpan);
+            } 
+            User::where('email', Auth::user()->email)->update([
+                'photo' => $path,
+            ]);
+            return redirect()->route('dashboard')
+                ->withSuccess('You have successfully edit!');
+        }
+
+        return redirect()->route('login')
+            ->withErrors([
+                'email' => 'Please login to access the dashboard.',
+            ])->onlyInput('email');
+    }
+
+    public function resizeFoto(){
+        if (Auth::check()) {
+            $path = User::where('email', Auth::user()->email);
+            $data = $path->first()->photo;
+            return view('auth.resize', compact('data'));
+        }
+
+        return redirect()->route('login')
+            ->withErrors([
+                'email' => 'Please login to access the dashboard.',
+            ])->onlyInput('email');
+    }
+
+    public function updateSizeFoto(){
+        if (Auth::check()) {
+            $path = User::where('email', Auth::user()->email)->first()->photo;
+            $photoPath = public_path('storage/'.$path);
+            $thumbnailPath = public_path('storage/thumbnails/'.$path);
+            $photoResized = Image::make($photoPath);
+            $photoResized->fit(100,100);
+            $photoResized->save($thumbnailPath);
+            return redirect()->route('dashboard')->with(['message'=> 'Berhasil di resize']); 
+        }
+
+        return redirect()->route('login')
+            ->withErrors([
+                'email' => 'Please login to access the dashboard.',
+            ])->onlyInput('email');
     }
 }

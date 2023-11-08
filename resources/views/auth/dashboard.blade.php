@@ -10,7 +10,7 @@
         <div class="w-50">
             <h1 class=" fw-bold ">
                 <p>Hello There,</p> 
-                <p>I'm Ghifari Raya</p>
+                <p>I'm {{Auth::user()->email}}</p>
             </h1>
             <p class="fs-4 fw-medium">
                 [Front End Developer]
