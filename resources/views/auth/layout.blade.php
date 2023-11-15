@@ -55,6 +55,16 @@
                                     @csrf
                                 </form>
                             </li>
+                            <li>
+                                <a a class="dropdown-item btn btn-outline-light" href="{{route('editFoto')}}">
+                                    Edit Profil
+                                </a>
+                            </li>
+                            <li>
+                                <a a class="dropdown-item btn btn-outline-light" href="{{route('resizeFoto')}}">
+                                    Resize Foto Profil
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     @endguest
