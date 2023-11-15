@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginRegisterController;
-
+use App\Http\Controllers\GalleryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,3 +29,4 @@ Route::controller(LoginRegisterController::class)->group(function() {
 Route::get('/home', function(){
     return view('welcome');
 });
+Route::resource('gallery', GalleryController::class);
