@@ -1,0 +1,77 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Gallery API documentation",
+        "description": "Latihan Praktikum 12",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "ghifarirayaammarkahfi@mail.ugm.ac.id"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/api/gallery": {
+            "get": {
+                "tags": [
+                    "Gallery"
+                ],
+                "summary": "all data gallery",
+                "description": "Get all data Gallery",
+                "operationId": "gallery",
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "500": {
+                        "description": "error"
+                    }
+                }
+            }
+        },
+        "/api/gallery-store": {
+            "post": {
+                "tags": [
+                    "Store Gallery"
+                ],
+                "summary": "store gallery",
+                "operationId": "12211d69d682a5008fd366b815c73b10",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "title gallery",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "description gallery",
+                                        "type": "string"
+                                    },
+                                    "picture": {
+                                        "description": "picture gallery",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "500": {
+                        "description": "error"
+                    }
+                }
+            }
+        }
+    }
+}

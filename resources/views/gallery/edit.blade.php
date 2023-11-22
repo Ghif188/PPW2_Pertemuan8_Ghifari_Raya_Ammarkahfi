@@ -34,7 +34,7 @@
                             <div class="col-md-6">
                                 <input type="file" class="form-control @error('picture') is-invalid @enderror" name="picture" onchange="document.getElementById('preview-image').src = window.URL.createObjectURL(this.files[0])"">
                                 @if ($errors->has('picture'))
-                                <span class="tet-danger">{{ $errors->first('picture')}}</span>
+                                <span class="text-danger">{{ $errors->first('picture')}}</span>
                                 @endif
                                 <img id="preview-image" src="{{asset('storage/posts_image/'.$data->picture)}}" alt="your image" class="mt-3 w-25"/>
                             </div>
