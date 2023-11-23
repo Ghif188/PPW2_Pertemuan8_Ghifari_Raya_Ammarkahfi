@@ -36,9 +36,8 @@ class GalleryController extends Controller
 
         $response = Http::get('http://127.0.0.1:8000/api/gallery');
         $objectResponse = $response->body();
-        $data = json_decode($objectResponse, true);
-        $data_decoded = $data['data']['data'];
-        return view('gallery.index', compact('data_decoded', 'no'));
+        $data = json_decode($objectResponse, true)['data'];
+        return view('gallery.index', compact('data', 'no'));
     }
 
     /**

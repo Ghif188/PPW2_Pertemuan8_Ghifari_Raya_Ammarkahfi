@@ -17,17 +17,17 @@
                 @foreach($data as $post)
                 <tr>
                     <td>{{$no++}}</td>
-                    <td>{{$post->title}}</td>
-                    <td>{{$post->description}}</td>
-                    <td><img src="{{asset('storage/posts_image/'.$post->picture)}}" width="100px" alt=""></td>
+                    <td>{{$post['title']}}</td>
+                    <td>{{$post['description']}}</td>
+                    <td><img src="{{asset('storage/posts_image/'.$post['picture'])}}" width="100px" alt=""></td>
                     <td>
                         <div class="d-flex">
-                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('gallery.destroy', $post->id) }}" method="POST">
+                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('gallery.destroy', $post['id']) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
                         </form>
-                        <a class="btn btn-secondary btn-sm ms-2 " href="{{route('gallery.edit', $post->id)}}">Edit</a>
+                        <a class="btn btn-secondary btn-sm ms-2 " href="{{route('gallery.edit', $post['id'])}}">Edit</a>
                         </div>
                     </td>
                 </tr>
